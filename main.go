@@ -10,6 +10,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
+
+func withCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+
 func main() {
 	fmt.Println("Running GeoTalk")
 
@@ -27,8 +44,12 @@ func main() {
 
 	r.HandleFunc("/msgs", GetMessages).Methods("GET")
 
-	log.Println("Running HTTPS server on :8443")
-	err := http.ListenAndServeTLS(":8443", "cert.pem", "key.pem", r)
+	// Apply CORS middleware
+	handlerWithCORS := withCORS(r)
+
+	log.Println("Running HTTP server on :8443")
+	err := http.ListenAndServe(":8443", handlerWithCORS)
+
 	if err != nil {
 		log.Fatal(err)
 	}
