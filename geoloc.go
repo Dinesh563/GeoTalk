@@ -44,10 +44,10 @@ type Message struct {
 }
 
 func PutMessage(w http.ResponseWriter, r *http.Request) {
-	log.Println("Handling PutMessage Route")
-
 	var msg Message
 	err := json.NewDecoder(r.Body).Decode(&msg)
+
+	log.Println("Put /Messages ", msg.Latitude, msg.Longitude, msg.Message)
 
 	if err != nil {
 		log.Fatal("Couldn't Decode the Body", err)
@@ -73,7 +73,7 @@ func PutMessage(w http.ResponseWriter, r *http.Request) {
 
 	if rerr == nil {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"data": "ok"})
+		json.NewEncoder(w).Encode(msg)
 		return
 	}
 	log.Fatalf("Failed to put current geo hash %v into redis %v", hash, rerr)
@@ -81,10 +81,10 @@ func PutMessage(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetMessages(w http.ResponseWriter, r *http.Request) {
-	// log.Println("Get Messages Handle")
-
 	latStr := r.URL.Query().Get("latitude")
 	longStr := r.URL.Query().Get("longitude")
+
+	log.Println("Get /Messages ", latStr, longStr)
 
 	if latStr == "" || longStr == "" {
 		http.Error(w, "Missing latitude or longitude", http.StatusBadRequest)
