@@ -1,13 +1,5 @@
 package main
 
-// curl --location 'localhost:8080/PutMessage' \
-// --header 'Content-Type: application/json' \
-// --data '{
-//     "latitude": 12.9753,
-//     "longitude": 77.591,
-//     "message": "HI there"
-// }'
-
 import (
 	"context"
 	"encoding/json"

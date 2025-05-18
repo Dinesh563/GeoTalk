@@ -4,7 +4,7 @@ go 1.23.0
 
 require github.com/gorilla/mux v1.8.1
 
-require github.com/pierrre/geohash v1.1.2 // indirect
+require github.com/pierrre/geohash v1.1.2
 
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
