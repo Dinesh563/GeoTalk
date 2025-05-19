@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"path/filepath"
 	"text/template"
-	"github.com/gorilla/mux"
 )
+
+const PORT = "4000"
 
 func withCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -44,8 +46,8 @@ func main() {
 	// Apply CORS middleware
 	handlerWithCORS := withCORS(r)
 
-	log.Println("Running HTTP server on :8443")
-	err := http.ListenAndServe(":8443", handlerWithCORS)
+	log.Println("Running HTTP server on :" + PORT)
+	err := http.ListenAndServe(":4000", handlerWithCORS)
 
 	if err != nil {
 		log.Fatal(err)
